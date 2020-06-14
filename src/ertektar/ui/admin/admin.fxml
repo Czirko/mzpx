@@ -4,42 +4,62 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="basePane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ertektar.ui.admin.AdminController">
-    <stylesheets>
-        <URL value="@admin.css" />
-    </stylesheets>
+<Pane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="1172.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ertektar.ui.admin.AdminController">
    <children>
-      <VBox layoutX="14.0" layoutY="14.0" prefHeight="375.0" prefWidth="203.0">
+      <Pane fx:id="mapPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+      <AnchorPane id="AnchorPane" fx:id="builderPane" layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="971.0" style="-fx-background-color: #5e4238;" styleClass="mainFxmlClass">
+         <stylesheets>
+            <URL value="@admin.css" />
+         </stylesheets>
          <children>
-            <JFXButton prefHeight="33.0" prefWidth="208.0" text="Érték szerkesztése" />
-            <JFXTextField fx:id="tfErtekCim" labelFloat="true" promptText="Érték Címe">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </JFXTextField>
-            <JFXButton fx:id="btnOpenDocx" onAction="#openDocX" prefHeight="33.0" prefWidth="224.0" text="Dokumentum kiválasztása">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </JFXButton>
+            <VBox layoutX="14.0" layoutY="14.0" prefHeight="375.0" prefWidth="203.0" style="-fx-background-color: #bd9b8f;">
+               <children>
+                  <JFXTextField fx:id="tfErtekCim" labelFloat="true" promptText="Érték Címe">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXButton fx:id="btnOpenDocx" onAction="#openDocX" prefHeight="33.0" prefWidth="224.0" style="-fx-background-color: white;" text="Dokumentum kiválasztása">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                  <ChoiceBox fx:id="categoryChooser" prefHeight="40.0" prefWidth="204.0">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </ChoiceBox>
+               </children>
+            </VBox>
+            <HBox layoutX="189.0" layoutY="429.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="33.0" prefWidth="783.0" spacing="20.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="0.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <children>
+                  <JFXButton fx:id="btnTovább" onAction="#goButtonMake" prefHeight="33.0" prefWidth="155.0" style="-fx-background-color: white;" text="Tovább" />
+                  <JFXButton fx:id="btnMégse" layoutX="20.0" layoutY="10.0" prefHeight="33.0" prefWidth="155.0" style="-fx-background-color: white;" text="Mégse">
+                     <HBox.margin>
+                        <Insets right="60.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
+            <JFXButton fx:id="btn4ErtekSelecting" layoutX="834.0" layoutY="405.0" onAction="#showButtons4elect" prefHeight="103.0" prefWidth="118.0" style="-fx-background-color: white;" text="Érték kiválasztása a Térképről" textAlignment="CENTER" wrapText="true" />
+            <TableView fx:id="tblErtek" layoutX="249.0" layoutY="14.0" prefHeight="375.0" prefWidth="706.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn prefWidth="75.0" text="C2" />
+              </columns>
+            </TableView>
          </children>
-      </VBox>
-      <HBox layoutY="356.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="33.0" prefWidth="600.0" spacing="20.0">
-         <padding>
-            <Insets left="10.0" right="10.0" />
-         </padding>
-         <children>
-            <JFXButton fx:id="btnTovább" onAction="#goButtonMake" prefHeight="33.0" prefWidth="62.0" text="Tovább" />
-            <JFXButton fx:id="btnMégse" layoutX="20.0" layoutY="10.0" prefHeight="33.0" prefWidth="62.0" text="Mégse">
-               <HBox.margin>
-                  <Insets right="60.0" />
-               </HBox.margin>
-            </JFXButton>
-         </children>
-      </HBox>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</Pane>

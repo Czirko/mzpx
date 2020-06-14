@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author Cz.Csaba
  */
-public class Db implements Dao{
+public class Db implements Dao {
 
     final String URL = "jdbc:mysql://localhost:3306/ertektar";
     final String USERNAME = "root";
@@ -40,37 +40,34 @@ public class Db implements Dao{
     private PreparedStatement pstmtRemoveButton;
     private PreparedStatement pstmtUpdateButton;
     private PreparedStatement pstmtAddButton;
+    private PreparedStatement pstmGetButtonByErtekID;
 
     Connection conn = null;
     Statement crStment = null;
     DatabaseMetaData dbmd = null;
 
-    public Db() throws SQLException
-    
-    {
+    public Db() throws SQLException {
         openConn();
 
         if (conn != null) {
-       
-               
-           
+
             pstmtGetAllErtek = conn.prepareStatement("SELECT * FROM ertek");
             pstmtRemoveErtek = conn.prepareStatement("DELETE FROM ertek WHERE id=?");
-            pstmGetErtekById = conn.prepareStatement("SELECT FROM ertek where id=?");
+            pstmGetErtekById = conn.prepareStatement("SELECT * FROM ertek where id=?");
             pstmtUpdateErtek = conn.prepareStatement("UPDATE ertek SET name=?,title=?,text=?,category=? WHERE id=?");
             pstmtAddErtek = conn.prepareStatement("INSERT INTO ertek (name,title,text,category) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
             pstmtGetAllButton = conn.prepareStatement("SELECT * FROM mapbutton");
+            pstmGetButtonByErtekID = conn.prepareStatement("SELECT * FROM mapbutton where ertekid=?");
             pstmtRemoveButton = conn.prepareStatement("DELETE FROM mapbuton WHERE id=?");
             pstmtUpdateButton = conn.prepareStatement("UPDATE mapbutton SET x=?,y=?,ertekid=? WHERE id=?");
             pstmtAddButton = conn.prepareStatement("INSERT INTO mapbutton (x,y,ertekid) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-
         }
 
-
     }
-   private void openConn(){
+
+    private void openConn() {
         try {
 
             conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -78,8 +75,8 @@ public class Db implements Dao{
             //Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("gáz van a connectionnel " + ex);
         }
-       
-   }
+
+    }
 
     public ArrayList<Ertek> getAllErtek() {
         //String sql = "SELECT * FROM ertek";
@@ -95,27 +92,37 @@ public class Db implements Dao{
                 erteks.add(e);
 
             }
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("baj van a kiolvasáskor " + ex);
         }
+
         return erteks;
 
     }
 
-    public Ertek pstmGetErtekById(int i) throws SQLException {
-        pstmGetErtekById.setInt(1, i);
-        ResultSet rs = pstmtGetAllErtek.executeQuery();
+    public Ertek pstmGetErtekById(int i) {
 
+        try {
+            pstmGetErtekById.setInt(1, i);
+            ResultSet rs = pstmGetErtekById.executeQuery();
 
-        Ertek e = new Ertek(rs.getInt("id"),
-                rs.getString("name"),
-                rs.getString("title"),
-                rs.getString("text"),
-                rs.getString("category"));
+            while (rs.next()) {
+                Ertek e = new Ertek(rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("title"),
+                        rs.getString("text"),
+                        rs.getString("category"));
+                return e;
+            }
+                rs.close();
 
-
-        return e;
+        } catch (SQLException ex) {
+            Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("getErtekById problem,... ID=" + i);
+        }
+        return null;
     }
 
     public int addErtek(Ertek e) throws SQLException {
@@ -130,10 +137,12 @@ public class Db implements Dao{
 
         System.out.println("Mentve az új Érték");
         if (rs.next()) {
-            return rs.getInt(1);
-        } else
+            int id = rs.getInt(1);
+            rs.close();
+            return id;
+        } else {
             return -1;
-
+        }
     }
 
     @Override
@@ -152,57 +161,79 @@ public class Db implements Dao{
         pstmtUpdateErtek.setInt(5, e.getId());
         return pstmtUpdateErtek.executeUpdate();
 
-
     }
 
     @Override
-    public List<DbButton> getAllButton()  {
-            List<DbButton> btns = new ArrayList<>();
+    public List<DbButton> getAllButton() {
+        List<DbButton> btns = new ArrayList<>();
         try {
-            
+
             ResultSet rs = pstmtGetAllButton.executeQuery();
-            
-            while (rs.next()) {
-                DbButton dbb = new DbButton(rs.getInt("id"),
-                        rs.getDouble("x"),
-                        rs.getDouble("y"),
-                        pstmGetErtekById(rs.getInt("ertekid")));
-                btns.add(dbb);
-                
-                
+            if (rs != null) {
+                while (rs.next()) {
+                    Ertek e = pstmGetErtekById(rs.getInt("ertekid"));
+                    DbButton dbb = new DbButton(rs.getInt("id"),
+                            rs.getDouble("x"),
+                            rs.getDouble("y"),
+                            e);
+                    btns.add(dbb);
+
+                }
+            } else {
+                System.out.println("rs ==null");
             }
-            System.out.println("Buttonok betöltve: " +btns.size());
+            System.out.println("Buttonok betöltve: " + btns.size());
         } catch (SQLException ex) {
             System.out.println("Baj a buttonok betöltésével");
             Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
         }
-            return btns;
+        return btns;
+
+    }
+    
+    public DbButton getButtonByErtekID(int ertekId){
+        try {
+            pstmGetButtonByErtekID.setInt(1, ertekId);
+            ResultSet rs = pstmGetButtonByErtekID.executeQuery();
+
+            while (rs.next()) {
+                Ertek e = pstmGetErtekById(rs.getInt("ertekid"));
+                DbButton dbb = new DbButton(rs.getInt("id"),
+                            rs.getDouble("x"),
+                            rs.getDouble("y"),
+                            e);
+                return dbb;
+            }
+                rs.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("getErtekById problem,... ID=" + ertekId);
+        }
+        return null;
         
     }
 
-
-
     @Override
     public int addButton(DbButton b) throws SQLException {
-        pstmtAddButton.setDouble(1,b.getX());
-        pstmtAddButton.setDouble(2,b.getY());
-        pstmtAddButton.setInt(3,b.getErtek().getId());
+        pstmtAddButton.setDouble(1, b.getX());
+        pstmtAddButton.setDouble(2, b.getY());
+        pstmtAddButton.setInt(3, b.getErtek().getId());
         pstmtAddButton.executeUpdate();
         ResultSet rs = pstmtAddButton.getGeneratedKeys();
 
         System.out.println("Mentve az új Button");
         if (rs.next()) {
             return rs.getInt(1);
-        }
-        else
+        } else {
             return -1;
-
+        }
 
     }
 
     @Override
     public int removeButton(DbButton b) throws SQLException {
-        pstmtRemoveButton.setInt(1,b.getId());
+        pstmtRemoveButton.setInt(1, b.getId());
 
         return pstmtRemoveButton.executeUpdate();
     }
@@ -210,12 +241,12 @@ public class Db implements Dao{
     @Override
     public int updateButton(DbButton b) throws SQLException {
 
-        pstmtUpdateButton.setDouble(1,b.getX());
-        pstmtUpdateButton.setDouble(2,b.getY());
-        pstmtUpdateButton.setInt(3,b.getErtek().getId());
-        pstmtUpdateButton.setInt(4,b.getId());
+        pstmtUpdateButton.setDouble(1, b.getX());
+        pstmtUpdateButton.setDouble(2, b.getY());
+        pstmtUpdateButton.setInt(3, b.getErtek().getId());
+        pstmtUpdateButton.setInt(4, b.getId());
         return pstmtAddButton.executeUpdate();
 
     }
-    
+
 }

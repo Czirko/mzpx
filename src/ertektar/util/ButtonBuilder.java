@@ -98,6 +98,7 @@ public class ButtonBuilder {
     private void makeDragable(Button button) {
 
         button.setOnMousePressed(((event) -> {
+            System.out.println("setOnmousePressed");
             x = event.getSceneX();
             y = event.getSceneY();
             //System.out.println("oldX:" +x);
@@ -106,6 +107,7 @@ public class ButtonBuilder {
         }));
 
         button.setOnMouseDragged((event) -> {
+             System.out.println("setOnmousedraggwed");
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             button.setLayoutX(event.getSceneX());
 
