@@ -36,7 +36,7 @@ public class mainController implements Initializable {
 
     @FXML
     private void enterToMainMap(ActionEvent event) {
-        ErtektarUtil.loadWindow(getClass().getResource("/ertektar/mainmap/mainMap.fxml"), "Notify Users", null,false);
+        ErtektarUtil.loadWindow(getClass().getResource("/ertektar/ui/showertek/show_ertek.fxml"), "Notify Users", null,false);
         
     }
 
