@@ -54,8 +54,8 @@ public class Db implements Dao {
             pstmtGetAllErtek = conn.prepareStatement("SELECT * FROM ertek");
             pstmtRemoveErtek = conn.prepareStatement("DELETE FROM ertek WHERE id=?");
             pstmGetErtekById = conn.prepareStatement("SELECT * FROM ertek where id=?");
-            pstmtUpdateErtek = conn.prepareStatement("UPDATE ertek SET name=?,title=?,text=?,category=? WHERE id=?");
-            pstmtAddErtek = conn.prepareStatement("INSERT INTO ertek (name,title,text,category) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            pstmtUpdateErtek = conn.prepareStatement("UPDATE ertek SET name=?,title=?,text=?,category=?,x=?,y=? WHERE id=?");
+            pstmtAddErtek = conn.prepareStatement("INSERT INTO ertek (name,title,text,category,x,y) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
             pstmtGetAllButton = conn.prepareStatement("SELECT * FROM mapbutton");
             pstmGetButtonByErtekID = conn.prepareStatement("SELECT * FROM mapbutton where ertekid=?");
@@ -88,7 +88,9 @@ public class Db implements Dao {
                         rs.getString("name"),
                         rs.getString("title"),
                         rs.getString("text"),
-                        rs.getString("category"));
+                        rs.getString("category"),
+                        rs.getDouble("x"),
+                        rs.getDouble("y"));
                 erteks.add(e);
 
             }
@@ -113,7 +115,9 @@ public class Db implements Dao {
                         rs.getString("name"),
                         rs.getString("title"),
                         rs.getString("text"),
-                        rs.getString("category"));
+                        rs.getString("category"),
+                        rs.getDouble("x"),
+                        rs.getDouble("y"));
                 return e;
             }
                 rs.close();
@@ -131,6 +135,8 @@ public class Db implements Dao {
         pstmtAddErtek.setString(2, e.getTitle());
         pstmtAddErtek.setString(3, e.getText());
         pstmtAddErtek.setString(4, e.getCategory());
+        pstmtAddErtek.setDouble(5, e.getX());
+        pstmtAddErtek.setDouble(6, e.getY());
         //pstmtAddErtek.set
         pstmtAddErtek.executeUpdate();
         ResultSet rs = pstmtAddErtek.getGeneratedKeys();
@@ -153,17 +159,24 @@ public class Db implements Dao {
     }
 
     @Override
-    public int updatertek(Ertek e) throws SQLException {
-        pstmtUpdateErtek.setString(1, e.getName());
-        pstmtUpdateErtek.setString(2, e.getTitle());
-        pstmtUpdateErtek.setString(3, e.getText());
-        pstmtUpdateErtek.setString(4, e.getCategory());
-        pstmtUpdateErtek.setInt(5, e.getId());
-        return pstmtUpdateErtek.executeUpdate();
+    public int updatertek(Ertek e) {
+        try {
+            pstmtUpdateErtek.setString(1, e.getName());
+            pstmtUpdateErtek.setString(2, e.getTitle());
+            pstmtUpdateErtek.setString(3, e.getText());
+            pstmtUpdateErtek.setString(4, e.getCategory());
+            pstmtUpdateErtek.setDouble(5, e.getX());
+            pstmtUpdateErtek.setDouble(6, e.getY());
+            pstmtUpdateErtek.setInt(7, e.getId());
+            return pstmtUpdateErtek.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Baj van az érték Update-jével: "+ex);
+        }return -1;
 
     }
 
-    @Override
+    /*@Override
     public List<DbButton> getAllButton() {
         List<DbButton> btns = new ArrayList<>();
         try {
@@ -247,6 +260,6 @@ public class Db implements Dao {
         pstmtUpdateButton.setInt(4, b.getId());
         return pstmtAddButton.executeUpdate();
 
-    }
+    }*/
 
 }

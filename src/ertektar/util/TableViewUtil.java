@@ -22,11 +22,11 @@ import javafx.scene.control.cell.TextFieldTableCell;
 public class TableViewUtil {
     
     private TableView tbv;
-    private List<DbButton> btns;
+    private List<Ertek> erteks;
 
-    public TableViewUtil(TableView tbv, List<DbButton> btns) {
+    public TableViewUtil(TableView tbv, List<Ertek> erteks) {
         this.tbv = tbv;
-        this.btns = btns;
+        this.erteks = erteks;
     }
     
     
@@ -48,17 +48,15 @@ public class TableViewUtil {
         tbv.getColumns().addAll(nameColumn, catColumn);
         
        
-        tbv.setItems(getData(btns));
+        tbv.setItems(getData(erteks));
     }
     
     
     
-    private ObservableList<Ertek> getData(List<DbButton> btns){
+    private ObservableList<Ertek> getData(List<Ertek> erteks){
         ObservableList<Ertek> data
             = FXCollections.observableArrayList();
-        for (DbButton btn : btns) {
-            data.add(btn.getErtek());
-        }
+       data.addAll(erteks);
         
         return data;
     }

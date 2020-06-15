@@ -15,6 +15,8 @@ public class Ertek {
     private String title;
     private String text;
     private String category;
+     private double X;
+    private double y;
 
     public Ertek() {
     }
@@ -26,6 +28,18 @@ public class Ertek {
         this.text = text;
         this.category = category;
     }
+
+    public Ertek(int id, String name, String title, String text, String category, double X, double y) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.text = text;
+        this.category = category;
+        this.X = X;
+        this.y = y;
+    }
+    
+    
 
     public Ertek(String name, String title, String text, String category) {
         this.name = name;
@@ -91,4 +105,22 @@ public class Ertek {
     public void setName(String name) {
         this.name = name;
     }
+
+    public double getX() {
+        return X;
+    }
+
+    public void setX(double X) {
+        this.X = X;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+    
+    
 }

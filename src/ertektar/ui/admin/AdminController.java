@@ -57,10 +57,10 @@ public class AdminController implements Initializable {
     DocumentBuilder docBuilder;
     ButtonBuilder bBuilder;
     TableViewUtil tbUtil;
-    List<DbButton> buttons;
+    List<Ertek> erteks;
     ObservableList catList = FXCollections.observableArrayList();
-   
 
+ 
     public Ertek selErtek;
     Db db;
     @FXML
@@ -82,33 +82,37 @@ public class AdminController implements Initializable {
     @FXML
     private TableView<?> tblErtek;
     @FXML
-    private ChoiceBox<?> categoryChooser;
+    private ChoiceBox<String> categoryChooser;
+    @FXML
+    private JFXButton btnEdit;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             db = new Db();
-            buttons = db.getAllButton();
+            erteks = db.getAllErtek();
+            bBuilder = new ButtonBuilder(mapPane, selErtek, db,  basePane);
         } catch (SQLException ex) {
             System.out.println("Baj a db-vel: " + ex.toString());
         }
-        tbUtil=new TableViewUtil(tblErtek, buttons);
+        loadChooserData();
+        tbUtil = new TableViewUtil(tblErtek, erteks);
         tbUtil.setTableData();
-        
+
     }
 
     @FXML
     public void goButtonMake(ActionEvent event) {
         if (selErtek != null) {
+            bBuilder.setErtek(selErtek);
             saveErtek();
             builderPane.setVisible(false);
-            bBuilder=new ButtonBuilder(mapPane, selErtek, db, buttons, mapPane);
-            bBuilder.takeButtonOnMap();
             
-        }else{
-            Alert alert = new Alert(AlertType.NONE,  
-                              "Válassz Értéket!",ButtonType.APPLY); 
-            alert.showAndWait();
+            bBuilder.takeButtonOnMap();
+
+        } else {
+            makeAleret("Válassz Értéket!");
         }
 
     }
@@ -119,7 +123,7 @@ public class AdminController implements Initializable {
         File f = docBuilder.getFileChooser();
         if (f != null) {
             selErtek = docBuilder.filePrcess(f);
-            
+
         }
         if (selErtek.getName() != null) {
             tfErtekCim.setText(selErtek.getName());
@@ -132,37 +136,48 @@ public class AdminController implements Initializable {
         List<String> list = new ArrayList<>(Arrays.asList("Természeti Értékek", "Agrár-és Élelmiszergazdaság", "Épített Kulturális Örökség", "Kulturális Örökség", "Sport", "Ipari és Műszaki Megoldások"));
         catList.addAll(list);
         categoryChooser.setItems(catList);
-        categoryChooser.valueProperty().addListener(
-        new ChangeListener<String>() {
+        categoryChooser.valueProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-
-                if(selErtek!=null)
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (selErtek != null) {
                     selErtek.setCategory(newValue);
+                }else{
+                    makeAleret("Előbb válassz értéket!");
+                }
             }
-
-           
         });
 
+        
+    }
+    
+    private void makeAleret(String msg){
+        Alert alert = new Alert(AlertType.NONE,
+                    msg, ButtonType.APPLY);
+            alert.showAndWait();
+        
     }
 
     private void saveErtek() {
-       try {
-                int selId = db.addErtek(selErtek);
-                if (selId >= 0) {
-                    selErtek.setId(selId);
-                    System.out.println("érték idja" + selErtek.getId()
-                    );
-
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Baj az érték mentésével : " + ex.toString());
-            }
+       
     }
 
     @FXML
-    private void showButtons4elect(ActionEvent event) {
+    private void showButtons4select(ActionEvent event) {
+        builderPane.setVisible(false);
+        bBuilder.loadButtonsFromDb();
+    }
+
+    @FXML
+    private void ErtekEditFromTable(ActionEvent event) {
+        Ertek e =  (Ertek) tblErtek.getSelectionModel().getSelectedItem();
+        if(e!=null){
+            System.out.println(e.getName());
+        }else{
+            System.out.println("baj a kiválasztáskor");
+        }
+
+        
+        
     }
 
 }

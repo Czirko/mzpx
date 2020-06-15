@@ -19,8 +19,5 @@ public interface Dao {
     int updatertek(Ertek e) throws SQLException;
 
 
-    List<DbButton> getAllButton() throws SQLException;
-    int addButton(DbButton b) throws SQLException;
-    int removeButton(DbButton b) throws SQLException;
-    int updateButton(DbButton b) throws SQLException;
+   
 }

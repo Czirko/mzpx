@@ -52,13 +52,14 @@
                   </JFXButton>
                </children>
             </HBox>
-            <JFXButton fx:id="btn4ErtekSelecting" layoutX="834.0" layoutY="405.0" onAction="#showButtons4elect" prefHeight="103.0" prefWidth="118.0" style="-fx-background-color: white;" text="Érték kiválasztása a Térképről" textAlignment="CENTER" wrapText="true" />
+            <JFXButton fx:id="btn4ErtekSelecting" layoutX="802.0" layoutY="429.0" onAction="#showButtons4select" prefHeight="56.0" prefWidth="155.0" style="-fx-background-color: white;" text="Érték kiválasztása a Térképről" textAlignment="CENTER" wrapText="true" />
             <TableView fx:id="tblErtek" layoutX="249.0" layoutY="14.0" prefHeight="375.0" prefWidth="706.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
               </columns>
             </TableView>
+            <JFXButton fx:id="btnEdit" layoutX="629.0" layoutY="441.0" onAction="#ErtekEditFromTable" prefHeight="31.0" prefWidth="155.0" style="-fx-background-color: white;" text="Szerkeszt" />
          </children>
       </AnchorPane>
    </children>
