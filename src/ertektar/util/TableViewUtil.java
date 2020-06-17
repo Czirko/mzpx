@@ -10,6 +10,7 @@ import ertektar.model.Ertek;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,7 +21,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
  * @author CzirkO
  */
 public class TableViewUtil {
-    
+
     private TableView tbv;
     private List<Ertek> erteks;
 
@@ -28,37 +29,44 @@ public class TableViewUtil {
         this.tbv = tbv;
         this.erteks = erteks;
     }
-    
-    
-    
-    
-    
-    public void setTableData(){
+
+    public TableViewUtil(TableView tbv) {
+        this.tbv = tbv;
         
-    TableColumn nameColumn = new TableColumn("Vezetéknév");
+    }
+    public void refreshData(List<Ertek> erteks){
+        this.erteks=erteks;
+        setTableData();
+    }
+    
+
+    public void setTableData() {
+
+        TableColumn nameColumn = new TableColumn("Vezetéknév");
         nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<Ertek, String>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        
+
         TableColumn catColumn = new TableColumn("Vezetéknév");
         catColumn.setMinWidth(100);
         catColumn.setCellValueFactory(new PropertyValueFactory<Ertek, String>("category"));
         catColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        
+        catColumn.setStyle("-fx-text-fill: red;");
+
         tbv.getColumns().addAll(nameColumn, catColumn);
-        
-       
+        tbv.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tbv.getSelectionModel().setCellSelectionEnabled(true);
+
         tbv.setItems(getData(erteks));
+
     }
-    
-    
-    
-    private ObservableList<Ertek> getData(List<Ertek> erteks){
+
+    private ObservableList<Ertek> getData(List<Ertek> erteks) {
         ObservableList<Ertek> data
-            = FXCollections.observableArrayList();
-       data.addAll(erteks);
-        
+                = FXCollections.observableArrayList();
+        data.addAll(erteks);
+
         return data;
     }
-    
+
 }

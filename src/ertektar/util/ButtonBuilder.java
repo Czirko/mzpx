@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -34,31 +35,51 @@ public class ButtonBuilder {
     Stage stage;
     Ertek ertek;
     Db db;
+    TableView tbv;
+    TableViewUtil tbvU;
+    Boolean isEdit=false;
 
-    public ButtonBuilder(Pane mapPane, Ertek ertek, Db db, Pane adminPane) {
+    public ButtonBuilder(Pane mapPane, Ertek ertek, Db db, Pane adminPane, TableView tbv) {
         this.mapPane = mapPane;
         this.ertek = ertek;
         this.db = db;
         this.adminPane = adminPane;
+        this.tbv = tbv;
+        tbvU = new TableViewUtil(tbv);
     }
 
     public void setErtek(Ertek ertek) {
         this.ertek = ertek;
     }
 
-    public void loadButtonsFromDb() {
+    private void buttonsFromDb() {
         erteks = db.getAllErtek();
 
-        for (Ertek b : erteks) {
-            Button mapbutton = new Button();
-            mapbutton.setId(b.getId()+"");
-            mapbutton.setLayoutX(b.getX());
-            mapbutton.setLayoutY(b.getY());
-            mapPane.getChildren().add(mapbutton);
-            mapbutton.setOnAction((actionEvent) -> this.openErtek(actionEvent));
+    }
 
+    public void loadButtonsFromDb() {
+        buttonsFromDb();
+        for (Ertek b : erteks) {
+
+            setButton(b, false);
         }
 
+    }
+
+    public void setButton(Ertek b, Boolean isEdit) {
+        this.isEdit=isEdit;
+        System.out.println(b.getX());
+        Button mapbutton = new Button();
+        mapbutton.setId(b.getId() + "");
+        mapbutton.setLayoutX(b.getX());
+        mapbutton.setLayoutY(b.getY());
+        mapPane.getChildren().add(mapbutton);
+        if (isEdit) {
+            makeDragable(mapbutton);
+            mapbutton.setOnAction(this::saveButtonData);
+        } else {
+            mapbutton.setOnAction((actionEvent) -> this.openErtek(actionEvent));
+            }
     }
 
     public void takeButtonOnMap() {
@@ -88,20 +109,25 @@ public class ButtonBuilder {
 
         //db.updatertek(ertek);
         try {
+            if(isEdit){
+                db.updatertek(ertek);
+                
+            }else{
             int selId = db.addErtek(ertek);
             if (selId >= 0) {
                 ertek.setId(selId);
                 System.out.println("érték mentve, id-ja" + ertek.getId()
                 );
 
-            }
+            }}
         } catch (SQLException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Baj az érték mentésével : " + ex.toString());
         }
         // db.addButton(dbButton);
         System.out.println("Button Mentve");
-
+        buttonsFromDb();
+        tbvU.refreshData(erteks);
         mapPane.setVisible(false);
         adminPane.setVisible(true);
 
@@ -140,5 +166,7 @@ public class ButtonBuilder {
         });
 
     }
+
+    
 
 }

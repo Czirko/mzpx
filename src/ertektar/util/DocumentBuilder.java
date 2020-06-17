@@ -62,7 +62,7 @@ public class DocumentBuilder {
             XWPFWordExtractor ex = new XWPFWordExtractor(docx);
             String full = ex.getText();
 
-            String[] splittedText = full.split("\\n");
+            String[] splittedText = full.split("\n");
             //System.out.println(splittedText.length);
             // System.out.println(ex.getText());
             String name = getNameByFileName(f);
@@ -73,7 +73,7 @@ public class DocumentBuilder {
                 if (i == 0) {
                     ertek.setTitle(splittedText[i]);
                 } else {
-                    text += splittedText[i] + "\\n";
+                    text += splittedText[i] + System.lineSeparator();
                 }
             }
             ertek.setText(text);

@@ -92,7 +92,7 @@ public class AdminController implements Initializable {
         try {
             db = new Db();
             erteks = db.getAllErtek();
-            bBuilder = new ButtonBuilder(mapPane, selErtek, db,  builderPane);
+            bBuilder = new ButtonBuilder(mapPane, selErtek, db,  builderPane,tblErtek);
         } catch (SQLException ex) {
             System.out.println("Baj a db-vel: " + ex.toString());
         }
@@ -171,7 +171,10 @@ public class AdminController implements Initializable {
     private void ErtekEditFromTable(ActionEvent event) {
         Ertek e =  (Ertek) tblErtek.getSelectionModel().getSelectedItem();
         if(e!=null){
-            System.out.println(e.getName());
+            bBuilder.setErtek(e);
+            bBuilder.setButton(e, true);
+            builderPane.setVisible(false);
+            
         }else{
             System.out.println("baj a kiválasztáskor");
         }
