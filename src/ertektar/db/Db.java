@@ -8,6 +8,11 @@ package ertektar.db;
 import ertektar.model.Dao;
 import ertektar.model.DbButton;
 import ertektar.model.Ertek;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -19,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -54,14 +61,8 @@ public class Db implements Dao {
             pstmtGetAllErtek = conn.prepareStatement("SELECT * FROM ertek");
             pstmtRemoveErtek = conn.prepareStatement("DELETE FROM ertek WHERE id=?");
             pstmGetErtekById = conn.prepareStatement("SELECT * FROM ertek where id=?");
-            pstmtUpdateErtek = conn.prepareStatement("UPDATE ertek SET name=?,title=?,text=?,category=?,x=?,y=? WHERE id=?");
-            pstmtAddErtek = conn.prepareStatement("INSERT INTO ertek (name,title,text,category,x,y) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-
-            pstmtGetAllButton = conn.prepareStatement("SELECT * FROM mapbutton");
-            pstmGetButtonByErtekID = conn.prepareStatement("SELECT * FROM mapbutton where ertekid=?");
-            pstmtRemoveButton = conn.prepareStatement("DELETE FROM mapbuton WHERE id=?");
-            pstmtUpdateButton = conn.prepareStatement("UPDATE mapbutton SET x=?,y=?,ertekid=? WHERE id=?");
-            pstmtAddButton = conn.prepareStatement("INSERT INTO mapbutton (x,y,ertekid) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            pstmtUpdateErtek = conn.prepareStatement("UPDATE ertek SET name=?,title=?,text=?,category=?,x=?,y=?,img1=? WHERE id=?");
+            pstmtAddErtek = conn.prepareStatement("INSERT INTO ertek (name,title,text,category,x,y,img1) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
         }
 
@@ -90,7 +91,8 @@ public class Db implements Dao {
                         rs.getString("text"),
                         rs.getString("category"),
                         rs.getDouble("x"),
-                        rs.getDouble("y"));
+                        rs.getDouble("y"),
+                        getImageFromBolb(rs.getBlob("img1")));
                 erteks.add(e);
 
             }
@@ -117,10 +119,11 @@ public class Db implements Dao {
                         rs.getString("text"),
                         rs.getString("category"),
                         rs.getDouble("x"),
-                        rs.getDouble("y"));
+                        rs.getDouble("y"),
+                        getImageFromBolb(rs.getBlob("img1")));
                 return e;
             }
-                rs.close();
+            rs.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,24 +133,44 @@ public class Db implements Dao {
     }
 
     public int addErtek(Ertek e) throws SQLException {
+        FileInputStream fin = null;
+        ResultSet rs=null;
+        try {
+            pstmtAddErtek.setString(1, e.getName());
+            pstmtAddErtek.setString(2, e.getTitle());
+            pstmtAddErtek.setString(3, e.getText());
+            pstmtAddErtek.setString(4, e.getCategory());
+            pstmtAddErtek.setDouble(5, e.getX());
+            pstmtAddErtek.setDouble(6, e.getY());
+            fin = new FileInputStream(e.getImgFile1());
+            pstmtAddErtek.setBinaryStream(7, fin, (int) e.getImgFile1().length());
 
-        pstmtAddErtek.setString(1, e.getName());
-        pstmtAddErtek.setString(2, e.getTitle());
-        pstmtAddErtek.setString(3, e.getText());
-        pstmtAddErtek.setString(4, e.getCategory());
-        pstmtAddErtek.setDouble(5, e.getX());
-        pstmtAddErtek.setDouble(6, e.getY());
-        //pstmtAddErtek.set
-        pstmtAddErtek.executeUpdate();
-        ResultSet rs = pstmtAddErtek.getGeneratedKeys();
+            pstmtAddErtek.executeUpdate();
+            rs = pstmtAddErtek.getGeneratedKeys();
 
-        System.out.println("Mentve az új Érték");
-        if (rs.next()) {
-            int id = rs.getInt(1);
-            rs.close();
-            return id;
-        } else {
+            System.out.println("Mentve az új Érték");
+            System.out.println(rs.toString());
+            int id=-1 ;
+            while (rs.next()) {
+
+                id = rs.getInt(1);
+                
+
+            }
+                return id;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Gond az img1 Streamelésénél " + ex);
             return -1;
+        } finally {
+
+            try {
+                rs.close();
+                fin.close();
+            } catch (IOException ex) {
+                System.out.println("fin==null");
+                
+            }
         }
     }
 
@@ -160,6 +183,7 @@ public class Db implements Dao {
 
     @Override
     public int updatertek(Ertek e) {
+        FileInputStream fin;
         try {
             pstmtUpdateErtek.setString(1, e.getName());
             pstmtUpdateErtek.setString(2, e.getTitle());
@@ -168,98 +192,29 @@ public class Db implements Dao {
             pstmtUpdateErtek.setDouble(5, e.getX());
             pstmtUpdateErtek.setDouble(6, e.getY());
             pstmtUpdateErtek.setInt(7, e.getId());
+            fin = new FileInputStream(e.getImgFile1());
+            pstmtAddErtek.setBinaryStream(7, fin, (int) e.getImgFile1().length());
             return pstmtUpdateErtek.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Baj van az érték Update-jével: "+ex);
-        }return -1;
+            System.out.println("Baj van az érték Update-jével: " + ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Baj az upDateNél");
+        }
+        return -1;
 
     }
 
-    /*@Override
-    public List<DbButton> getAllButton() {
-        List<DbButton> btns = new ArrayList<>();
+    private Image getImageFromBolb(Blob b) {
         try {
 
-            ResultSet rs = pstmtGetAllButton.executeQuery();
-            if (rs != null) {
-                while (rs.next()) {
-                    Ertek e = pstmGetErtekById(rs.getInt("ertekid"));
-                    DbButton dbb = new DbButton(rs.getInt("id"),
-                            rs.getDouble("x"),
-                            rs.getDouble("y"),
-                            e);
-                    btns.add(dbb);
-
-                }
-            } else {
-                System.out.println("rs ==null");
-            }
-            System.out.println("Buttonok betöltve: " + btns.size());
-        } catch (SQLException ex) {
-            System.out.println("Baj a buttonok betöltésével");
-            Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return btns;
-
-    }
-    
-    public DbButton getButtonByErtekID(int ertekId){
-        try {
-            pstmGetButtonByErtekID.setInt(1, ertekId);
-            ResultSet rs = pstmGetButtonByErtekID.executeQuery();
-
-            while (rs.next()) {
-                Ertek e = pstmGetErtekById(rs.getInt("ertekid"));
-                DbButton dbb = new DbButton(rs.getInt("id"),
-                            rs.getDouble("x"),
-                            rs.getDouble("y"),
-                            e);
-                return dbb;
-            }
-                rs.close();
-
+            return new Image(b.getBinaryStream());
         } catch (SQLException ex) {
             Logger.getLogger(Db.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("getErtekById problem,... ID=" + ertekId);
+            System.out.println("Baj a Kép importálásával");
+            return null;
         }
-        return null;
-        
     }
-
-    @Override
-    public int addButton(DbButton b) throws SQLException {
-        pstmtAddButton.setDouble(1, b.getX());
-        pstmtAddButton.setDouble(2, b.getY());
-        pstmtAddButton.setInt(3, b.getErtek().getId());
-        pstmtAddButton.executeUpdate();
-        ResultSet rs = pstmtAddButton.getGeneratedKeys();
-
-        System.out.println("Mentve az új Button");
-        if (rs.next()) {
-            return rs.getInt(1);
-        } else {
-            return -1;
-        }
-
-    }
-
-    @Override
-    public int removeButton(DbButton b) throws SQLException {
-        pstmtRemoveButton.setInt(1, b.getId());
-
-        return pstmtRemoveButton.executeUpdate();
-    }
-
-    @Override
-    public int updateButton(DbButton b) throws SQLException {
-
-        pstmtUpdateButton.setDouble(1, b.getX());
-        pstmtUpdateButton.setDouble(2, b.getY());
-        pstmtUpdateButton.setInt(3, b.getErtek().getId());
-        pstmtUpdateButton.setInt(4, b.getId());
-        return pstmtAddButton.executeUpdate();
-
-    }*/
 
 }

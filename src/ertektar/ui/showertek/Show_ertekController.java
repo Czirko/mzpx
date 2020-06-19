@@ -93,6 +93,7 @@ public class Show_ertekController implements Initializable {
             mapbutton.setId(b.getId() + "");
             mapbutton.setLayoutX(b.getX());
             mapbutton.setLayoutY(b.getY());
+            mapbutton.setMinSize(props.buttonWidth, 0);
             baseMapPane.getChildren().add(mapbutton);
             System.out.println("Hozzáadva");
             mapbutton.setOnAction((actionEvent) -> this.openErtek(actionEvent));

@@ -5,6 +5,9 @@
  */
 package ertektar.model;
 
+import java.io.File;
+import javafx.scene.image.Image;
+
 /**
  *
  * @author Cz.Csaba
@@ -17,9 +20,40 @@ public class Ertek {
     private String category;
      private double X;
     private double y;
+    
+    private File imgFile1;
+    private Image img1;
 
     public Ertek() {
     }
+
+    public Ertek(int id, String name, String title, String text, String category, double X, double y, File imgFile1) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.text = text;
+        this.category = category;
+        this.X = X;
+        this.y = y;
+        this.imgFile1 = imgFile1;
+    }
+
+    public Ertek(int id, String name, String title, String text, String category, double X, double y, Image img1) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.text = text;
+        this.category = category;
+        this.X = X;
+        this.y = y;
+        this.img1 = img1;
+    }
+    
+    
+
+   
+    
+    
 
     public Ertek(int id, String name, String title, String text, String category) {
         this.id = id;
@@ -121,6 +155,26 @@ public class Ertek {
     public void setY(double y) {
         this.y = y;
     }
+
+    public File getImgFile1() {
+        return imgFile1;
+    }
+
+    public void setImgFile1(File imgFile1) {
+        this.imgFile1 = imgFile1;
+    }
+
+    public Image getImg1() {
+        return img1;
+    }
+
+    public void setImg1(Image img1) {
+        this.img1 = img1;
+    }
+
+   
+    
+    
     
     
 }

@@ -36,6 +36,7 @@ public class TableViewUtil {
     }
     public void refreshData(List<Ertek> erteks){
         this.erteks=erteks;
+        tbv.getColumns().clear();
         setTableData();
     }
     
