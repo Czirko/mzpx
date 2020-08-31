@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="844.0" prefWidth="1153.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ertektar.ui.showertek.Show_ertekController">
+   <children>
+      <Pane fx:id="baseMapPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="828.0" prefWidth="1143.0" />
+      <AnchorPane id="AnchorPane" fx:id="ertekPane" prefHeight="846.0" prefWidth="1112.0" styleClass="mainFxmlClass" visible="false">
+         <stylesheets>
+            <URL value="@show_ertek.css" />
+         </stylesheets>
+         <children>
+            <VBox alignment="CENTER" prefHeight="769.0" prefWidth="1112.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox fx:id="headerHbox" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblCathegory" alignment="CENTER" prefHeight="100.0" prefWidth="225.0" text="Kategória" textAlignment="CENTER">
+                           <graphic>
+                              <ImageView fx:id="imvCategory" fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Label>
+                        <Label fx:id="lblErtekTitle" prefHeight="143.0" prefWidth="582.0" text="Érték Címe">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                           <padding>
+                              <Insets left="50.0" />
+                           </padding>
+                        </Label>
+                        <JFXButton fx:id="btnBack" onAction="#backToMap" prefHeight="102.0" prefWidth="307.0" text="Vissza">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="contentHbox" prefHeight="745.0" prefWidth="1112.0">
+                     <children>
+                        <Label fx:id="lblContent" accessibleRole="IMAGE_VIEW" alignment="TOP_LEFT" prefHeight="732.0" prefWidth="530.0" text="Label" wrapText="true" />
+                        <VBox prefHeight="668.0" prefWidth="489.0">
+                           <children>
+                              <ImageView fx:id="imv1" fitHeight="223.0" fitWidth="487.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="imv2" fitHeight="245.0" fitWidth="486.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="imv3" fitHeight="276.0" fitWidth="489.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>

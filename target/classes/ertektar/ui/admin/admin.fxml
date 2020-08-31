@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="1172.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ertektar.ui.admin.AdminController">
+   <children>
+      <Pane fx:id="mapPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+      <AnchorPane id="AnchorPane" fx:id="builderPane" layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="971.0" style="-fx-background-color: #5e4238;" styleClass="mainFxmlClass">
+         <stylesheets>
+            <URL value="@admin.css" />
+         </stylesheets>
+         <children>
+            <VBox layoutX="14.0" layoutY="14.0" prefHeight="375.0" prefWidth="203.0" style="-fx-background-color: #bd9b8f;">
+               <children>
+                  <JFXTextField fx:id="tfErtekCim" labelFloat="true" promptText="Érték Címe">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXButton fx:id="btnOpenDocx" onAction="#openDocX" prefHeight="33.0" prefWidth="224.0" style="-fx-background-color: white;" text="Dokumentum kiválasztása">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                  <ChoiceBox fx:id="categoryChooser" prefHeight="40.0" prefWidth="204.0">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </ChoiceBox>
+               </children>
+            </VBox>
+            <HBox layoutX="189.0" layoutY="429.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="33.0" prefWidth="783.0" spacing="20.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="0.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <children>
+                  <JFXButton fx:id="btnTovább" onAction="#goButtonMake" prefHeight="33.0" prefWidth="155.0" style="-fx-background-color: white;" text="Tovább" />
+                  <JFXButton fx:id="btnMégse" layoutX="20.0" layoutY="10.0" prefHeight="33.0" prefWidth="155.0" style="-fx-background-color: white;" text="Mégse">
+                     <HBox.margin>
+                        <Insets right="60.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
+            <JFXButton fx:id="btn4ErtekSelecting" layoutX="802.0" layoutY="429.0" onAction="#showButtons4select" prefHeight="56.0" prefWidth="155.0" style="-fx-background-color: white;" text="Érték kiválasztása a Térképről" textAlignment="CENTER" wrapText="true" />
+            <TableView fx:id="tblErtek" layoutX="249.0" layoutY="14.0" prefHeight="375.0" prefWidth="706.0" style="-fx-background-color: transparent;">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <JFXButton fx:id="btnEdit" layoutX="629.0" layoutY="441.0" onAction="#ErtekEditFromTable" prefHeight="31.0" prefWidth="155.0" style="-fx-background-color: white;" text="Szerkeszt" />
+            <VBox fx:id="vboxImg" layoutX="40.0" layoutY="389.0" prefHeight="200.0" prefWidth="188.0">
+               <children>
+                  <Button fx:id="btnSetImg" mnemonicParsing="false" onAction="#setImage" prefHeight="133.0" prefWidth="187.0" text="Button" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="editPane" prefHeight="619.0" prefWidth="1172.0" visible="false">
+         <children>
+            <JFXTextArea fx:id="txaContent" layoutX="14.0" layoutY="75.0" prefHeight="539.0" prefWidth="623.0" wrapText="true" />
+            <VBox alignment="CENTER" layoutX="719.0" layoutY="10.0" prefHeight="600.0" prefWidth="354.0">
+               <children>
+                  <JFXButton id="1" fx:id="btn1" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="1">
+                     <graphic>
+                        <ImageView fx:id="btnImg" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton id="2" fx:id="btn2" layoutX="30.0" layoutY="20.0" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="2">
+                     <graphic>
+                        <ImageView fx:id="btnimg2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton id="3" fx:id="btn3" layoutX="30.0" layoutY="20.0" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="3">
+                     <graphic>
+                        <ImageView fx:id="btnimg3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+            </VBox>
+            <HBox layoutX="14.0" layoutY="10.0" prefHeight="50.0" prefWidth="1153.0">
+               <children>
+                  <Label fx:id="lblTitle" prefHeight="52.0" prefWidth="489.0" text="Label" />
+                  <Label fx:id="lblCat" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="53.0" prefWidth="673.0" text="Label" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>

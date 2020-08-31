@@ -17,7 +17,6 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 
-
 /**
  *
  * @author Cz.Csaba
@@ -53,6 +52,7 @@ public class DocumentBuilder {
          ertek = new Ertek();
        
             System.out.println(f.getAbsolutePath());
+
             XWPFDocument docx = null;
             try {
                 docx = new XWPFDocument(new FileInputStream(f));

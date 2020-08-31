@@ -95,8 +95,6 @@ public class AdminController implements Initializable {
     @FXML
     private JFXButton btnEdit;
     @FXML
-    private Button btnImg1;
-    @FXML
     private VBox vboxImg;
     @FXML
     private AnchorPane editPane;
@@ -105,13 +103,15 @@ public class AdminController implements Initializable {
     @FXML
     private JFXButton btn1;
     @FXML
+    private Button btnImg1;
+    @FXML
     private JFXButton btn2;
-     @FXML
-    private ImageView btnimg2;
     @FXML
     private ImageView btnimg2;
     @FXML
-    private JFXButton btnimg3;
+    private JFXButton btn3;
+    @FXML
+    private ImageView btnimg3;
     @FXML
     private Label lblTitle;
     @FXML
@@ -227,6 +227,7 @@ public class AdminController implements Initializable {
             Path p = FileSystems.getDefault().getPath(f.getAbsolutePath());
             img = createImage(p, 300, 40);
             ImageView imv = new ImageView(img);
+      
             if(img!=null){
             
             vboxImg.getChildren().add(0, imv);

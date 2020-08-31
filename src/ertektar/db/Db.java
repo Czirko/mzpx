@@ -33,7 +33,7 @@ import javax.imageio.ImageIO;
  */
 public class Db implements Dao {
 
-    final String URL = "jdbc:mysql://localhost:3306/ertektar";
+    final String URL = "jdbc:mysql://localhost:3306/ertektar?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     final String USERNAME = "root";
     final String PASSWORD = "1234";
 

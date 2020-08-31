@@ -64,7 +64,7 @@
             <JFXButton fx:id="btnEdit" layoutX="629.0" layoutY="441.0" onAction="#ErtekEditFromTable" prefHeight="31.0" prefWidth="155.0" style="-fx-background-color: white;" text="Szerkeszt" />
             <VBox fx:id="vboxImg" layoutX="40.0" layoutY="389.0" prefHeight="200.0" prefWidth="188.0">
                <children>
-                  <Button fx:id="btnImg1" mnemonicParsing="false" onAction="#setImage" prefHeight="133.0" prefWidth="187.0" text="Button" />
+                  <Button fx:id="btnSetImg" mnemonicParsing="false" onAction="#setImage" prefHeight="133.0" prefWidth="187.0" text="Button" />
                </children>
             </VBox>
          </children>
@@ -76,7 +76,7 @@
                <children>
                   <JFXButton id="1" fx:id="btn1" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="1">
                      <graphic>
-                        <ImageView fx:id="btnImg1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="btnImg" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </JFXButton>
                   <JFXButton id="2" fx:id="btn2" layoutX="30.0" layoutY="20.0" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="2">
@@ -84,7 +84,7 @@
                         <ImageView fx:id="btnimg2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </JFXButton>
-                  <JFXButton id="3" fx:id="btnimg3" layoutX="30.0" layoutY="20.0" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="3">
+                  <JFXButton id="3" fx:id="btn3" layoutX="30.0" layoutY="20.0" onAction="#selectImage" prefHeight="164.0" prefWidth="345.0" text="3">
                      <graphic>
                         <ImageView fx:id="btnimg3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
